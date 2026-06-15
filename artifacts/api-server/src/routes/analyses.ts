@@ -12,11 +12,9 @@ router.get("/analyses", async (req, res): Promise<void> => {
   const offset = parsed.success && parsed.data.offset ? Number(parsed.data.offset) : 0;
   const userId = parsed.success && parsed.data.userId ? Number(parsed.data.userId) : null;
 
-  let query = db.select().from(analysesTable).orderBy(desc(analysesTable.createdAt)).limit(limit).offset(offset);
-
   const rows = userId
     ? await db.select().from(analysesTable).where(eq(analysesTable.userId, userId)).orderBy(desc(analysesTable.createdAt)).limit(limit).offset(offset)
-    : await query;
+    : await db.select().from(analysesTable).orderBy(desc(analysesTable.createdAt)).limit(limit).offset(offset);
 
   res.json(rows);
 });
@@ -29,8 +27,14 @@ router.post("/analyses", async (req, res): Promise<void> => {
   }
   const { imageBase64, pair, timeframe, userId } = parsed.data;
 
-  const imageSeed = imageBase64.slice(0, 200).split("").reduce((a, c, i) => a + c.charCodeAt(0) * (i + 1), 0);
-  const result = runAnalysisEngine(pair, timeframe, imageSeed);
+  let result;
+  try {
+    result = await runAnalysisEngine(pair, timeframe, imageBase64);
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err);
+    res.status(502).json({ error: msg });
+    return;
+  }
 
   const truncatedImage = imageBase64.length > 2_000_000 ? imageBase64.slice(0, 2_000_000) : imageBase64;
 
