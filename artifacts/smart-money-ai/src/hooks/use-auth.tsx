@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { useLocation } from "wouter";
-import { useGetMe, useLogin, useRegister, useLogout } from "@workspace/api-client-react";
-import { LoginInput, RegisterInput, User } from "@workspace/api-client-react/src/generated/api.schemas";
+import { useGetMe, useLogin, useRegister, useLogout, getGetMeQueryKey } from "@workspace/api-client-react";
+import type { LoginInput, RegisterInput, User } from "@workspace/api-client-react";
 import { useToast } from "@/hooks/use-toast";
 
 interface AuthContextType {
@@ -22,6 +22,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   
   const { data: user, isLoading: isUserLoading, refetch } = useGetMe({
     query: {
+      queryKey: getGetMeQueryKey(),
       enabled: !!token,
       retry: false,
     }

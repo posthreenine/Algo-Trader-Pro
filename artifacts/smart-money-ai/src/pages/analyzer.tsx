@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { UploadCloud, CheckCircle2, AlertCircle, Activity, Image as ImageIcon } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { Analysis } from "@workspace/api-client-react/src/generated/api.schemas";
+import type { Analysis } from "@workspace/api-client-react";
 
 const PAIRS = ["XAUUSD", "EURUSD", "GBPUSD", "USDJPY", "BTCUSD", "ETHUSD", "Custom"];
 const TIMEFRAMES = ["M1", "M5", "M15", "M30", "H1", "H4", "D1"];

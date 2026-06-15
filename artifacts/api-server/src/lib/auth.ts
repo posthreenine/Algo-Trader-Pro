@@ -1,7 +1,11 @@
 import jwt from "jsonwebtoken";
 import { Request, Response, NextFunction } from "express";
 
-const JWT_SECRET = process.env.SESSION_SECRET ?? "smart-money-secret-key";
+const SESSION_SECRET = process.env.SESSION_SECRET;
+if (!SESSION_SECRET) {
+  throw new Error("SESSION_SECRET environment variable is required but was not provided.");
+}
+const JWT_SECRET = SESSION_SECRET;
 const JWT_EXPIRY = "7d";
 
 export function signToken(payload: { userId: number; email: string; role: string }): string {
