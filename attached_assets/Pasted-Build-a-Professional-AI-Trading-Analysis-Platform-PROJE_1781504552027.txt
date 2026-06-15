@@ -1,0 +1,523 @@
+Build a Professional AI Trading Analysis Platform.
+
+PROJECT NAME:
+Smart Money AI Analyzer
+
+GOAL:
+
+Create a web application that analyzes uploaded trading chart screenshots and generates trading setups based on:
+
+- Smart Money Concept (SMC)
+- ICT Concepts
+- SMT Divergence
+- Alchemist Concepts
+- Liquidity Theory
+- Order Block Theory
+- Supply & Demand
+- Support & Resistance
+- Market Structure
+
+The system must be modern, responsive, mobile-friendly and similar to TradingView style.
+
+====================================================
+
+USER FLOW
+
+====================================================
+
+STEP 1
+
+User uploads screenshot chart.
+
+Supported:
+
+PNG
+JPG
+JPEG
+WEBP
+
+STEP 2
+
+User selects:
+
+Pair
+
+- XAUUSD
+- EURUSD
+- GBPUSD
+- USDJPY
+- BTCUSD
+- ETHUSD
+- Custom Pair
+
+Timeframe
+
+- M1
+- M5
+- M15
+- M30
+- H1
+- H4
+- D1
+
+STEP 3
+
+AI analyzes screenshot.
+
+STEP 4
+
+Display complete analysis.
+
+====================================================
+
+ANALYSIS ENGINE
+
+====================================================
+
+MARKET STRUCTURE ENGINE
+
+Detect:
+
+- Bullish Structure
+- Bearish Structure
+- BOS
+- CHOCH
+- MSS
+- Internal Structure
+- External Structure
+
+====================================================
+
+LIQUIDITY ENGINE
+
+====================================================
+
+Detect:
+
+- Buy Side Liquidity
+- Sell Side Liquidity
+- Equal High
+- Equal Low
+- Liquidity Sweep
+- Stop Hunt
+
+====================================================
+
+ORDER BLOCK ENGINE
+
+====================================================
+
+Detect:
+
+- Bullish OB
+- Bearish OB
+- Mitigation Block
+- Breaker Block
+
+====================================================
+
+FVG ENGINE
+
+====================================================
+
+Detect:
+
+- Fair Value Gap
+- Inverse Fair Value Gap
+
+====================================================
+
+SMT ENGINE
+
+====================================================
+
+Detect:
+
+- SMT Bullish
+- SMT Bearish
+
+====================================================
+
+SUPPLY DEMAND ENGINE
+
+====================================================
+
+Detect:
+
+- Supply Zone
+- Demand Zone
+
+====================================================
+
+SUPPORT RESISTANCE ENGINE
+
+====================================================
+
+Detect:
+
+- Strong Support
+- Strong Resistance
+
+====================================================
+
+KEY LEVEL ENGINE
+
+====================================================
+
+Detect:
+
+- Daily High
+- Daily Low
+- Weekly High
+- Weekly Low
+- Monthly High
+- Monthly Low
+
+====================================================
+
+PREMIUM DISCOUNT ENGINE
+
+====================================================
+
+Detect:
+
+- Premium Zone
+- Equilibrium
+- Discount Zone
+
+====================================================
+
+ENTRY ENGINE
+
+====================================================
+
+Generate:
+
+Scalping Entry
+
+Intraday Entry
+
+Swing Entry
+
+====================================================
+
+RISK MANAGEMENT ENGINE
+
+====================================================
+
+Calculate:
+
+Entry Price
+
+Stop Loss
+
+Take Profit 1
+
+Take Profit 2
+
+Take Profit 3
+
+Risk Reward Ratio
+
+Formula:
+
+Risk = Entry - Stop Loss
+
+Reward = Take Profit - Entry
+
+RR = Reward / Risk
+
+====================================================
+
+CONFIDENCE ENGINE
+
+====================================================
+
+Scoring System:
+
+BOS = 15
+
+CHOCH = 15
+
+Liquidity Sweep = 15
+
+Order Block = 15
+
+FVG = 10
+
+SMT = 10
+
+Support Resistance = 10
+
+Premium Discount = 10
+
+Total = 100
+
+Generate Confidence Score.
+
+Example:
+
+82/100
+
+====================================================
+
+AI RESULT CARD
+
+====================================================
+
+Display:
+
+PAIR
+
+TIMEFRAME
+
+MARKET BIAS
+
+MARKET STRUCTURE
+
+LIQUIDITY
+
+ORDER BLOCK
+
+FVG
+
+SUPPLY DEMAND
+
+KEY LEVEL
+
+ENTRY
+
+STOP LOSS
+
+TP1
+
+TP2
+
+TP3
+
+RR
+
+CONFIDENCE SCORE
+
+====================================================
+
+CHART ANNOTATION
+
+====================================================
+
+Draw directly on uploaded image:
+
+Green Area:
+Buy Zone
+
+Red Area:
+Sell Zone
+
+Blue Area:
+Liquidity
+
+Purple Area:
+Order Block
+
+Yellow Area:
+FVG
+
+Display:
+
+Entry
+SL
+TP1
+TP2
+TP3
+
+====================================================
+
+TRADING JOURNAL
+
+====================================================
+
+Save all analysis.
+
+Fields:
+
+Date
+
+Pair
+
+Timeframe
+
+Bias
+
+Entry
+
+SL
+
+TP
+
+Result
+
+Win
+
+Loss
+
+====================================================
+
+STATISTICS PAGE
+
+====================================================
+
+Display:
+
+Total Trades
+
+Winning Trades
+
+Losing Trades
+
+Win Rate
+
+Average RR
+
+Profit Factor
+
+Best Trade
+
+Worst Trade
+
+====================================================
+
+WATCHLIST PAGE
+
+====================================================
+
+Allow user to save favorite pairs.
+
+====================================================
+
+DASHBOARD
+
+====================================================
+
+Sidebar:
+
+Dashboard
+
+Analyzer
+
+Journal
+
+Statistics
+
+Watchlist
+
+Settings
+
+====================================================
+
+UI DESIGN
+
+====================================================
+
+TradingView inspired.
+
+Dark Theme.
+
+Black background.
+
+Professional cards.
+
+Responsive mobile.
+
+Responsive desktop.
+
+Glassmorphism.
+
+Smooth animation.
+
+====================================================
+
+TECH STACK
+
+====================================================
+
+Frontend:
+
+React
+TypeScript
+Tailwind
+Shadcn UI
+
+Backend:
+
+Node.js
+Express
+
+Database:
+
+PostgreSQL
+
+Image Processing:
+
+OpenCV
+
+AI:
+
+OpenAI Vision API integration
+
+====================================================
+
+ADMIN PANEL
+
+====================================================
+
+Manage:
+
+Users
+
+Analyses
+
+Statistics
+
+Logs
+
+====================================================
+
+SECURITY
+
+====================================================
+
+Authentication
+
+Login
+
+Register
+
+Forgot Password
+
+JWT
+
+Protected Routes
+
+====================================================
+
+DEPLOYMENT READY
+
+====================================================
+
+Build production ready project.
+
+Create all pages.
+
+Create database schema.
+
+Create API endpoints.
+
+Create responsive layouts.
+
+Create demo data.
+
+No placeholder pages.
+
+No mock screens.
+
+Fully functional MVP.

@@ -1,0 +1,31 @@
+kind = "web"
+previewPath = "/"
+title = "Smart Money AI Analyzer"
+version = "1.0.0"
+id = "artifacts/smart-money-ai"
+router = "path"
+
+[[integratedSkills]]
+name = "react-vite"
+version = "1.0.0"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 18179
+
+[services.development]
+run = "pnpm --filter @workspace/smart-money-ai run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/smart-money-ai", "run", "build" ]
+publicDir = "artifacts/smart-money-ai/dist/public"
+serve = "static"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "18179"
+BASE_PATH = "/"

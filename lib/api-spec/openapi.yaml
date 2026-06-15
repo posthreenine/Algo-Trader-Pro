@@ -1,22 +1,33 @@
 openapi: 3.1.0
 info:
-  # Do not change the title, if the title changes, the import paths will be broken
   title: Api
   version: 0.1.0
-  description: API specification
+  description: Smart Money AI Analyzer API
 servers:
   - url: /api
     description: Base API path
 tags:
   - name: health
     description: Health operations
+  - name: auth
+    description: Authentication
+  - name: analyses
+    description: Chart analyses
+  - name: journal
+    description: Trading journal
+  - name: statistics
+    description: Trading statistics
+  - name: watchlist
+    description: Watchlist management
+  - name: admin
+    description: Admin operations
+
 paths:
   /healthz:
     get:
       operationId: healthCheck
       tags: [health]
       summary: Health check
-      description: Returns server health status
       responses:
         "200":
           description: Healthy
@@ -24,13 +35,702 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+
+  # Auth
+  /auth/register:
+    post:
+      operationId: register
+      tags: [auth]
+      summary: Register a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RegisterInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthResponse"
+        "400":
+          description: Bad request
+
+  /auth/login:
+    post:
+      operationId: login
+      tags: [auth]
+      summary: Login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginInput"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthResponse"
+        "401":
+          description: Unauthorized
+
+  /auth/logout:
+    post:
+      operationId: logout
+      tags: [auth]
+      summary: Logout
+      responses:
+        "200":
+          description: OK
+
+  /auth/me:
+    get:
+      operationId: getMe
+      tags: [auth]
+      summary: Get current user
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "401":
+          description: Unauthorized
+
+  # Analyses
+  /analyses:
+    get:
+      operationId: listAnalyses
+      tags: [analyses]
+      summary: List all analyses
+      parameters:
+        - in: query
+          name: userId
+          schema:
+            type: ["integer", "null"]
+        - in: query
+          name: pair
+          schema:
+            type: ["string", "null"]
+        - in: query
+          name: limit
+          schema:
+            type: ["integer", "null"]
+        - in: query
+          name: offset
+          schema:
+            type: ["integer", "null"]
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Analysis"
+
+    post:
+      operationId: createAnalysis
+      tags: [analyses]
+      summary: Submit chart for AI analysis
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AnalysisInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Analysis"
+
+  /analyses/{id}:
+    get:
+      operationId: getAnalysis
+      tags: [analyses]
+      summary: Get a single analysis
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Analysis"
+        "404":
+          description: Not found
+
+    delete:
+      operationId: deleteAnalysis
+      tags: [analyses]
+      summary: Delete an analysis
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+  # Journal
+  /journal:
+    get:
+      operationId: listJournalEntries
+      tags: [journal]
+      summary: List journal entries
+      parameters:
+        - in: query
+          name: userId
+          schema:
+            type: ["integer", "null"]
+        - in: query
+          name: pair
+          schema:
+            type: ["string", "null"]
+        - in: query
+          name: result
+          schema:
+            type: ["string", "null"]
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/JournalEntry"
+
+    post:
+      operationId: createJournalEntry
+      tags: [journal]
+      summary: Create a journal entry
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/JournalEntryInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/JournalEntry"
+
+  /journal/{id}:
+    patch:
+      operationId: updateJournalEntry
+      tags: [journal]
+      summary: Update a journal entry
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/JournalEntryUpdate"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/JournalEntry"
+
+    delete:
+      operationId: deleteJournalEntry
+      tags: [journal]
+      summary: Delete a journal entry
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+  # Statistics
+  /statistics:
+    get:
+      operationId: getStatistics
+      tags: [statistics]
+      summary: Get trading statistics
+      parameters:
+        - in: query
+          name: userId
+          schema:
+            type: ["integer", "null"]
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Statistics"
+
+  # Dashboard summary
+  /dashboard/summary:
+    get:
+      operationId: getDashboardSummary
+      tags: [statistics]
+      summary: Get dashboard summary data
+      parameters:
+        - in: query
+          name: userId
+          schema:
+            type: ["integer", "null"]
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DashboardSummary"
+
+  # Watchlist
+  /watchlist:
+    get:
+      operationId: listWatchlist
+      tags: [watchlist]
+      summary: Get user's watchlist
+      parameters:
+        - in: query
+          name: userId
+          schema:
+            type: ["integer", "null"]
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/WatchlistItem"
+
+    post:
+      operationId: addToWatchlist
+      tags: [watchlist]
+      summary: Add pair to watchlist
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WatchlistInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WatchlistItem"
+
+  /watchlist/{id}:
+    delete:
+      operationId: removeFromWatchlist
+      tags: [watchlist]
+      summary: Remove pair from watchlist
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+  # Admin
+  /admin/users:
+    get:
+      operationId: adminListUsers
+      tags: [admin]
+      summary: Admin - list all users
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/User"
+
+  /admin/stats:
+    get:
+      operationId: adminGetStats
+      tags: [admin]
+      summary: Admin - platform-wide statistics
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AdminStats"
+
+  # Image upload
+  /upload:
+    post:
+      operationId: uploadImage
+      tags: [analyses]
+      summary: Upload a chart image and get base64 back
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UploadInput"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UploadResponse"
+
 components:
   schemas:
     HealthStatus:
       type: object
+      required: [status]
       properties:
         status:
           type: string
-      required:
-        - status
 
+    # Auth schemas
+    RegisterInput:
+      type: object
+      required: [email, password, username]
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+        username:
+          type: string
+
+    LoginInput:
+      type: object
+      required: [email, password]
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+
+    User:
+      type: object
+      required: [id, email, username, role, createdAt]
+      properties:
+        id:
+          type: integer
+        email:
+          type: string
+        username:
+          type: string
+        role:
+          type: string
+        createdAt:
+          type: string
+
+    AuthResponse:
+      type: object
+      required: [token, user]
+      properties:
+        token:
+          type: string
+        user:
+          $ref: "#/components/schemas/User"
+
+    # Analysis schemas
+    AnalysisInput:
+      type: object
+      required: [imageBase64, pair, timeframe]
+      properties:
+        imageBase64:
+          type: string
+          description: Base64 encoded chart image
+        pair:
+          type: string
+        timeframe:
+          type: string
+        userId:
+          type: ["integer", "null"]
+
+    AnalysisResult:
+      type: object
+      required: [marketBias, marketStructure, liquidity, orderBlock, fvg, supplyDemand, keyLevel, premiumDiscount, entryScalping, entryIntraday, entrySwing, entryPrice, stopLoss, tp1, tp2, tp3, riskReward, confidenceScore, annotations]
+      properties:
+        marketBias:
+          type: string
+        marketStructure:
+          type: string
+        liquidity:
+          type: string
+        orderBlock:
+          type: string
+        fvg:
+          type: string
+        supplyDemand:
+          type: string
+        keyLevel:
+          type: string
+        premiumDiscount:
+          type: string
+        entryScalping:
+          type: string
+        entryIntraday:
+          type: string
+        entrySwing:
+          type: string
+        entryPrice:
+          type: number
+        stopLoss:
+          type: number
+        tp1:
+          type: number
+        tp2:
+          type: number
+        tp3:
+          type: number
+        riskReward:
+          type: number
+        confidenceScore:
+          type: integer
+        annotations:
+          type: string
+          description: JSON string with annotation data for chart overlay
+
+    Analysis:
+      type: object
+      required: [id, pair, timeframe, imageBase64, result, createdAt]
+      properties:
+        id:
+          type: integer
+        userId:
+          type: ["integer", "null"]
+        pair:
+          type: string
+        timeframe:
+          type: string
+        imageBase64:
+          type: string
+        result:
+          $ref: "#/components/schemas/AnalysisResult"
+        createdAt:
+          type: string
+
+    # Journal schemas
+    JournalEntryInput:
+      type: object
+      required: [pair, timeframe, bias, entryPrice, stopLoss, takeProfit, tradeDate]
+      properties:
+        userId:
+          type: ["integer", "null"]
+        pair:
+          type: string
+        timeframe:
+          type: string
+        bias:
+          type: string
+        entryPrice:
+          type: number
+        stopLoss:
+          type: number
+        takeProfit:
+          type: number
+        result:
+          type: ["string", "null"]
+        notes:
+          type: ["string", "null"]
+        tradeDate:
+          type: string
+
+    JournalEntryUpdate:
+      type: object
+      properties:
+        result:
+          type: ["string", "null"]
+        notes:
+          type: ["string", "null"]
+        pair:
+          type: ["string", "null"]
+        timeframe:
+          type: ["string", "null"]
+        bias:
+          type: ["string", "null"]
+        entryPrice:
+          type: ["number", "null"]
+        stopLoss:
+          type: ["number", "null"]
+        takeProfit:
+          type: ["number", "null"]
+
+    JournalEntry:
+      type: object
+      required: [id, pair, timeframe, bias, entryPrice, stopLoss, takeProfit, tradeDate, createdAt]
+      properties:
+        id:
+          type: integer
+        userId:
+          type: ["integer", "null"]
+        pair:
+          type: string
+        timeframe:
+          type: string
+        bias:
+          type: string
+        entryPrice:
+          type: number
+        stopLoss:
+          type: number
+        takeProfit:
+          type: number
+        result:
+          type: ["string", "null"]
+        notes:
+          type: ["string", "null"]
+        tradeDate:
+          type: string
+        createdAt:
+          type: string
+
+    # Statistics
+    Statistics:
+      type: object
+      required: [totalTrades, winningTrades, losingTrades, winRate, avgRR, profitFactor, bestTrade, worstTrade]
+      properties:
+        totalTrades:
+          type: integer
+        winningTrades:
+          type: integer
+        losingTrades:
+          type: integer
+        winRate:
+          type: number
+        avgRR:
+          type: number
+        profitFactor:
+          type: number
+        bestTrade:
+          type: ["number", "null"]
+        worstTrade:
+          type: ["number", "null"]
+
+    DashboardSummary:
+      type: object
+      required: [totalAnalyses, totalTrades, winRate, avgConfidence, recentAnalyses, pairBreakdown]
+      properties:
+        totalAnalyses:
+          type: integer
+        totalTrades:
+          type: integer
+        winRate:
+          type: number
+        avgConfidence:
+          type: number
+        recentAnalyses:
+          type: array
+          items:
+            $ref: "#/components/schemas/Analysis"
+        pairBreakdown:
+          type: array
+          items:
+            $ref: "#/components/schemas/PairStat"
+
+    PairStat:
+      type: object
+      required: [pair, count, winRate]
+      properties:
+        pair:
+          type: string
+        count:
+          type: integer
+        winRate:
+          type: number
+
+    # Watchlist
+    WatchlistInput:
+      type: object
+      required: [pair]
+      properties:
+        userId:
+          type: ["integer", "null"]
+        pair:
+          type: string
+        notes:
+          type: ["string", "null"]
+
+    WatchlistItem:
+      type: object
+      required: [id, pair, createdAt]
+      properties:
+        id:
+          type: integer
+        userId:
+          type: ["integer", "null"]
+        pair:
+          type: string
+        notes:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+
+    # Admin
+    AdminStats:
+      type: object
+      required: [totalUsers, totalAnalyses, totalJournalEntries, analysesToday]
+      properties:
+        totalUsers:
+          type: integer
+        totalAnalyses:
+          type: integer
+        totalJournalEntries:
+          type: integer
+        analysesToday:
+          type: integer
+
+    # Upload
+    UploadInput:
+      type: object
+      required: [imageBase64]
+      properties:
+        imageBase64:
+          type: string
+
+    UploadResponse:
+      type: object
+      required: [imageBase64, mimeType]
+      properties:
+        imageBase64:
+          type: string
+        mimeType:
+          type: string
